@@ -25,14 +25,25 @@ namespace API.Movies.Repository
             return await _context.Categories.AsNoTracking().AnyAsync(c => c.Name == name);
         }
 
-        public Task<bool> CreateCategoryAsync(Category category)
+        public async Task<bool> CreateCategoryAsync(Category category)
         {
-            throw new NotImplementedException();
+            category.CreatedDate= DateTime.UtcNow;
+            await _context.Categories.AddAsync(category);
+            return await SaveAsync();
+            
         }
 
-        public Task<bool> DeleteCategoryAsync(int id)
+        public async Task<bool> DeleteCategoryAsync(int id)
         {
-            throw new NotImplementedException();
+            var category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(c=> c.Id == id);
+
+            if (category == null)
+            {
+                return false;
+            }   
+
+            _context.Categories.Remove(category);
+            return await SaveAsync();
         }
 
         public async Task<ICollection<Category>> GetCategoriesAsync()
@@ -48,9 +59,16 @@ namespace API.Movies.Repository
             
         }
 
-        public Task<bool> UpdateCategoryAsync(Category category)
+        public async Task<bool> UpdateCategoryAsync(Category category)
         {
-            throw new NotImplementedException();
+            category.ModifiedDate = DateTime.UtcNow;
+            _context.Categories.Update(category);
+            return await SaveAsync();
+        }
+
+        private async Task<bool> SaveAsync()
+        {
+            return await _context.SaveChangesAsync() >= 0 ? true : false;
         }
     }
 }
