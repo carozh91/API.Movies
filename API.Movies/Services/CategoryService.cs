@@ -1,14 +1,19 @@
 ﻿using API.Movies.DAL.Models;
+using API.Movies.DAL.Models.Dtos;
+using API.Movies.Repository.IRepository;
 using API.Movies.Services.IServices;
+using AutoMapper;
 
 namespace API.Movies.Services
 {
     public class CategoryService: ICategoryService
     {
-        private readonly ICategoryService _categoryService;
-        public CategoryService()
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
+        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
         {
-            
+            _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
         Task<bool> ICategoryService.CategoryExistsByIdAsync(int id)
@@ -26,17 +31,19 @@ namespace API.Movies.Services
             throw new NotImplementedException();
         }
 
-        Task<bool> ICategoryService.DeleteCategoryAsync(int id)
+        public Task<bool> ICategoryService.DeleteCategoryAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        Task<ICollection<Category>> ICategoryService.GetCategoriesAsync()
+        public async  Task<ICollection<CategoryDto>> GetCategoriesAsync()
         {
-            throw new NotImplementedException();
+            var categories = _categoryRepository.GetCategoriesAsync();
+            return _mapper.Map<ICollection<CategoryDto>>(categories); 
+
         }
 
-        Task<Category> ICategoryService.GetCategoryAsync(int id)
+        Task<CategoryDto> ICategoryService.GetCategoryAsync(int id)
         {
             throw new NotImplementedException();
         }
