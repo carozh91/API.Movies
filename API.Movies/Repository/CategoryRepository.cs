@@ -48,7 +48,8 @@ namespace API.Movies.Repository
 
         public async Task<ICollection<Category>> GetCategoriesAsync()
         {
-            return await _context.Categories.AsNoTracking().OrderBy(c => c.Name).ToListAsync();
+            var categories = await _context.Categories.AsNoTracking().OrderBy(c => c.Name).ToListAsync();
+            return categories;
 
         }
 
