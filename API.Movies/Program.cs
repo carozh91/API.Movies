@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
-builder.Services.AddAutoMapper(cfg => cfg.AddProfile<Mappers>();
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<Mappers>());
 
 // Dependency inijection for Services
 
